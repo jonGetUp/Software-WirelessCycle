@@ -1,0 +1,1197 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <help_text>// Uncomment the following line to change the fontsize and font:
+// fontsize=18
+// fontfamily=SansSerif //possible: SansSerif,Serif,Monospaced
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+// Welcome to UMLet!
+//
+// Double-click on elements to add them to the diagram, or to copy them
+// Edit elements by modifying the text in this panel
+// Hold Cmd to select multiple elements
+// Use Cmd+mouse to select via lasso
+//
+// Use +/- or Cmd+mouse wheel to zoom
+// Drag a whole relation at its central square icon
+//
+// Press Cmd+C to copy the whole diagram to the system clipboard (then just paste it to, eg, Word)
+// Edit the files in the "palettes" directory to create your own element palettes
+//
+// Select "Custom Elements &gt; New..." to create new element types
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// This text will be stored with each diagram;  use it for notes.</help_text>
+  <zoom_level>5</zoom_level>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>845</x>
+      <y>165</y>
+      <w>10</w>
+      <h>10</h>
+    </coordinates>
+    <panel_attributes>type=initial</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>725</x>
+      <y>25</y>
+      <w>130</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>FAULT ISR</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>965</x>
+      <y>25</y>
+      <w>65</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>TIMER_ISR</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>725</x>
+      <y>185</y>
+      <w>245</w>
+      <h>95</h>
+    </coordinates>
+    <panel_attributes>Init
+--
+- init ISL94212
+(Define the value, that will trigg a FaulT, Scan mode...)
+- Init PIC18F
+(SPI, CAN, AD, Interrupt on change)
+- variable init
+isBatteryCharge = isOverVotlage = isUnderVoltage = isTemperatureError = 0
+isCellXCharge = retryCurrentFault = BATT_FAULT = FAULT = TIMER = 0
+EN_ISL = EN_Isense = EN_VREF = 0
+SHDN = 1
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>855</x>
+      <y>1125</y>
+      <w>100</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>TEMPERATURE_ERROR
+--
+Temp is over 70 Celsius
+//isTemeperatureError = 1
+Read register fault
+Clear the Flag bit if ok
+
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>855</x>
+      <y>940</y>
+      <w>95</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>UNDER-VOLTAGE
+--
+A cell Voltage is under 3.2V
+//isUnderVoltage = 1
+Read register fault 
+Clear the Flag bit if ok
+
+
+
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>830</x>
+      <y>670</y>
+      <w>95</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>OVER-VOLTAGE
+--
+Over-Voltage on one cell
+or entire battery pack
+//isOverVoltage = 1
+Read register fault
+Clear the Flag bit if ok
+
+
+
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>880</x>
+      <y>1295</y>
+      <w>205</w>
+      <h>75</h>
+    </coordinates>
+    <panel_attributes>RETRY_NO_FAULT
+--
+- Fault status is OK
+- Variable reset
+isOverVoltage = isUnderVoltage = isTemperatureError = 0
+BATT_FAULT = FAULT = isCellxCharge = isBatteryCharge = 0
+SHDN = 1
+(pin toggled low then high,turn the external MOSFETs back on)
+
+
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>835</x>
+      <y>25</y>
+      <w>65</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>Batt_FAULT ISR</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>725</x>
+      <y>150</y>
+      <w>65</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>MAIN</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>845</x>
+      <y>330</y>
+      <w>15</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>840</x>
+      <y>375</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>type=decision</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>855</x>
+      <y>380</y>
+      <w>100</w>
+      <h>145</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;180.0;10.0;180.0;270.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>780</x>
+      <y>380</y>
+      <w>70</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>120.0;10.0;10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>890</x>
+      <y>370</y>
+      <w>30</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>[else]
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>765</x>
+      <y>370</y>
+      <w>70</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>[Batt_FALSE==1]
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>850</x>
+      <y>345</y>
+      <w>70</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>800</x>
+      <y>575</y>
+      <w>110</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>FAULT_ISR
+--
+retryCurrentFault = 0
+Read ISL Fault status register
+(Read Fault Status bit)
+
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>810</x>
+      <y>290</y>
+      <w>85</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>IDLE
+--
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>935</x>
+      <y>525</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>type=decision</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>950</x>
+      <y>530</y>
+      <w>80</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;140.0;10.0;140.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>845</x>
+      <y>530</y>
+      <w>100</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>180.0;10.0;10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>985</x>
+      <y>520</y>
+      <w>30</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>[else]
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>855</x>
+      <y>635</y>
+      <w>30</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;40.0;10.0;40.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>990</x>
+      <y>635</y>
+      <w>85</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>SLEEP_TIMER
+--
+wait to remeasure the current
+TIMER = 0
+Load sleep timer
+(Watchdog Timer)
+Go to sleep mode
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>975</x>
+      <y>555</y>
+      <w>100</w>
+      <h>65</h>
+    </coordinates>
+    <panel_attributes>MEASURE
+--
+Active peripherals
+EN_Isense = EN_VREF = 0
+wait
+Measure Isense
+Acctualise batterie capacity
+Disable peripherals
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>720</x>
+      <y>50</y>
+      <w>85</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>FAULT_ISR
+--
+clear interrupt flag
+FALSE = 1
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>835</x>
+      <y>50</y>
+      <w>95</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>BATT_FAULT_ISR
+--
+clear interrupt flag
+//Falling or Rising Edge?
+//if(PORTx.y = 1)//(Rising)
+Batt_FALSE = 1
+//else
+//(falling)
+(interrupt on change)
+
+
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>965</x>
+      <y>50</y>
+      <w>85</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>TIMER_ISR
+--
+clear interrupt flag
+TIMER = 1
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>310</y>
+      <w>200</w>
+      <h>420</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>260.0;780.0;260.0;820.0;380.0;820.0;380.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>685</x>
+      <y>530</y>
+      <w>95</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>OVER_CURRENT
+--
+Dangerous Fault
+-&gt; Latch, cut alimentation
+Save fault for report
+(programme need a reset)
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>815</x>
+      <y>0</y>
+      <w>130</w>
+      <h>25</h>
+    </coordinates>
+    <panel_attributes>! WEAK-UP no RESET from sleep!
+fg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>770</x>
+      <y>765</y>
+      <w>100</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>BATTERY_CHARGE
+--
+(Battery is fully charged)
+//isBatteryCharge = 1
+-Set Capacity to max
+-Stop balance
+-Turn off current bypass
+  for all cells
+
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>880</x>
+      <y>1440</y>
+      <w>95</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>SLEEP_TIMER
+--
+wait to retest the alarm
+TIMER = 0
+Load sleep timer
+(Watchdog Timer)
+Go to sleep mode
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>640</x>
+      <y>440</y>
+      <w>95</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>CUT_ALIMENTATION
+--
+SHDN = 0
+cut alimentation
+(Save fault for report)
+Read Fault status register
+
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>880</x>
+      <y>765</y>
+      <w>100</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>BALANCE
+--
+Turn on current bypass,
+for the cell that reach 4,2v
+//CELLx = 1
+turn off current bypass for cells under 4,2V
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>865</x>
+      <y>730</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>type=decision</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>880</x>
+      <y>735</y>
+      <w>65</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;110.0;10.0;110.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>735</y>
+      <w>65</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>110.0;10.0;10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>890</x>
+      <y>725</y>
+      <w>30</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>[else]
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>800</x>
+      <y>725</y>
+      <w>75</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>[allCellsCharged]
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>865</x>
+      <y>515</y>
+      <w>60</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>[FALSE == 1]
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>775</x>
+      <y>410</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>type=decision</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>790</x>
+      <y>415</y>
+      <w>70</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;10.0;120.0;220.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>415</y>
+      <w>105</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>190.0;10.0;10.0;10.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>810</x>
+      <y>405</y>
+      <w>30</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>[else]
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>725</x>
+      <y>405</y>
+      <w>60</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>[NO_FAULT]
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>730</x>
+      <y>595</y>
+      <w>10</w>
+      <h>10</h>
+    </coordinates>
+    <panel_attributes>type=final</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>800</x>
+      <y>715</y>
+      <w>300</w>
+      <h>810</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;1600.0;580.0;1600.0;580.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>770</x>
+      <y>830</y>
+      <w>95</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>CUT_ALIMENTATION
+--
+SHDN = 0
+cut alimentation
+(Save fault for report)
+Read Fault status register
+
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>855</x>
+      <y>1005</y>
+      <w>95</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>CUT_ALIMENTATION
+--
+SHDN = 0
+cut alimentation
+(Save fault for report)
+Read Fault status register
+
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>755</x>
+      <y>1440</y>
+      <w>95</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>SLEEP
+--
+Go to sleep mode
+(wait BATT_FAULT falling
+edge to weak up the system)
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>850</x>
+      <y>1405</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>type=decision</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>865</x>
+      <y>1410</y>
+      <w>65</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;110.0;10.0;110.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>795</x>
+      <y>1410</y>
+      <w>65</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>110.0;10.0;10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>875</x>
+      <y>1400</y>
+      <w>30</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>[else]
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>785</x>
+      <y>1400</y>
+      <w>75</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>[BATT_FAULT]
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>840</x>
+      <y>630</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>type=decision</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>750</x>
+      <y>635</y>
+      <w>120</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>180.0;10.0;10.0;10.0;10.0;500.0;220.0;500.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>760</x>
+      <y>625</y>
+      <w>35</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>[else]
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>860</x>
+      <y>625</y>
+      <w>75</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>[OVER-VOLTAGE]
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>860</x>
+      <y>1190</y>
+      <w>95</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>CUT_ALIMENTATION
+--
+SHDN = 0
+cut alimentation
+(Save fault for report)
+Read Fault status register
+
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>865</x>
+      <y>900</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>type=decision</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>885</x>
+      <y>895</y>
+      <w>75</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>[UNDER-VOLTAGE]
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>885</x>
+      <y>905</y>
+      <w>20</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;20.0;10.0;20.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>825</x>
+      <y>895</y>
+      <w>35</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>[else]
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>820</x>
+      <y>905</y>
+      <w>85</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;10.0;10.0;340.0;150.0;340.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>830</x>
+      <y>1090</y>
+      <w>75</w>
+      <h>175</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>110.0;10.0;10.0;10.0;10.0;330.0;130.0;330.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>845</x>
+      <y>1080</y>
+      <w>35</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>[else]
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>885</x>
+      <y>1085</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>type=decision</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>905</x>
+      <y>1080</y>
+      <w>90</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>[TEMPERATURE FAULT]
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>900</x>
+      <y>1090</y>
+      <w>35</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;10.0;50.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>895</x>
+      <y>1260</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>type=decision</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>835</x>
+      <y>1280</y>
+      <w>35</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>[else]
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>855</x>
+      <y>1265</y>
+      <w>50</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>80.0;10.0;10.0;10.0;10.0;280.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>915</x>
+      <y>1255</y>
+      <w>90</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>[NO_FAULT]
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>910</x>
+      <y>1265</y>
+      <w>75</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;130.0;10.0;130.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>880</x>
+      <y>820</y>
+      <w>65</w>
+      <h>75</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>110.0;10.0;110.0;130.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>945</x>
+      <y>1375</y>
+      <w>15</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>555</x>
+      <y>530</y>
+      <w>120</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>RETRY
+--
+- Retry Once before stop
+retryCurrentFault = 1
+BATT_FAULT = 0
+SHDN = 1
+(pin toggled low then high,
+turn the external MOSFETs back on)
+
+
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>670</x>
+      <y>495</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>type=decision</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>685</x>
+      <y>500</y>
+      <w>60</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;10.0;100.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>615</x>
+      <y>500</y>
+      <w>65</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>110.0;10.0;10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>695</x>
+      <y>490</y>
+      <w>30</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>[else]
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>595</x>
+      <y>490</y>
+      <w>85</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>[RetryCurrentFault == 0]
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>570</x>
+      <y>615</y>
+      <w>95</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>SLEEP_TIMER
+--
+wait to retest the alarm
+TIMER = 0
+Load sleep timer
+(Watchdog Timer)
+Go to sleep mode
+valign=top
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>540</x>
+      <y>310</y>
+      <w>265</w>
+      <h>385</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>510.0;10.0;10.0;10.0;10.0;750.0;150.0;750.0</additional_attributes>
+  </element>
+</diagram>
