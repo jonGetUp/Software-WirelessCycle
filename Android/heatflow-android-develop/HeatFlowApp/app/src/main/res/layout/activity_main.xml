@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimaryDark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="?android:attr/actionBarSize"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:padding="@dimen/margin_tiny"
+            android:adjustViewBounds="true"
+            android:clickable="false"
+            android:contentDescription="@string/app_name"
+            android:focusable="false"
+            android:longClickable="false"
+            android:scaleType="fitStart"
+            android:src="@drawable/hf_logo"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/HellGray"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:text="@string/app_name"/>
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/DarkGray"
+        android:padding="@dimen/margin_small">
+
+        <!-- Connection's state -->
+        <ImageView
+            android:id="@+id/img_connection_state"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:contentDescription="@string/connection_state"
+            android:src="@drawable/ble_disconnected"/>
+
+        <TextView
+            android:id="@+id/tv_connection_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:text="@string/connection_state"/>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <!-- Battery Level -->
+        <TextView
+            android:id="@+id/tvDeviceBattery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_margin"
+            tools:text="Info"/>
+
+        <ImageView
+            android:id="@+id/imgBattery"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:contentDescription="@string/battery_level"
+            android:src="@drawable/battery100"/>
+
+    </LinearLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_view_result_1"
+            style="@style/CardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/default_margin"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:selectableItemBackground"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/card_view_result_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/txt_temperature_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:layout_marginEnd="@dimen/default_margin"
+                    android:text="@string/ads_1_result"
+                    android:textAlignment="center"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TableLayout
+                    android:id="@+id/tbl_temprature"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/default_margin"
+                    android:stretchColumns="0,1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_temperature_title">
+
+                    <TableRow
+                        android:id="@+id/tbl_row_1"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/textView1"
+                            android:layout_column="0"
+                            android:text="T1"
+                            android:textAlignment="center"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_column="1"
+                            android:text="T2"
+                            android:textAlignment="center"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/tbl_row_2"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_medium">
+
+                        <TextView
+                            android:id="@+id/txt_ads_1_diff_0_1"
+                            android:layout_column="0"
+                            android:text="@string/default_mv"
+                            android:textAlignment="center"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:textColor="@color/Gray" />
+
+                        <TextView
+                            android:id="@+id/txt_ads_1_diff_2_3"
+                            android:layout_column="1"
+                            android:text="@string/default_mv"
+                            android:textAlignment="center"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:textColor="@color/Gray" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/tbl_row_3"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/default_margin">
+
+                        <TextView
+                            android:id="@+id/txt_ads_1_t_1"
+                            android:layout_column="0"
+                            android:text="@string/default_c"
+                            android:textAlignment="center"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textColor="@color/HellGray" />
+
+                        <TextView
+                            android:id="@+id/txt_ads_1_t_2"
+                            android:layout_column="1"
+                            android:text="@string/default_c"
+                            android:textAlignment="center"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textColor="@color/HellGray" />
+
+                    </TableRow>
+
+                </TableLayout>
+
+            </android.support.constraint.ConstraintLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_view_result_2"
+            style="@style/CardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/default_margin"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:selectableItemBackground"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_view_result_1">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/txt_heatflow_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:layout_marginEnd="@dimen/default_margin"
+                    android:text="@string/ads_2_result"
+                    android:textAlignment="center"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TableLayout
+                    android:id="@+id/tbl_heatflow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/default_margin"
+                    android:stretchColumns="0,1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_heatflow_title">
+
+                    <TableRow
+                        android:id="@+id/tbl_hf_row_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_medium">
+
+                        <TextView
+                            android:id="@+id/txt_ads_2_raw"
+                            android:layout_column="0"
+                            android:layout_width="0dp"
+                            android:text="@string/ads_raw"
+                            android:textAlignment="textEnd"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:textColor="@color/Gray" />
+
+                        <TextView
+                            android:id="@+id/txt_ads_2_raw_value"
+                            android:layout_column="1"
+                            android:layout_width="0dp"
+                            android:text="@string/default_raw_value"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/Gray"
+                            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:id="@+id/tbl_hf_row_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/default_margin">
+
+                        <TextView
+                            android:id="@+id/txt_ads_2_q_title"
+                            android:layout_column="0"
+                            android:layout_width="0dp"
+                            android:text="@string/hf_formula"
+                            android:textAlignment="center"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textColor="@color/HellGray" />
+                        <TextView
+                            android:id="@+id/txt_ads_2_q_val"
+                            android:layout_column="1"
+                            android:layout_width="0dp"
+                            android:text="@string/hf_default"
+                            android:textAlignment="center"
+                            android:textColor="@color/HellGray"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                    </TableRow>
+
+                </TableLayout>
+
+            </android.support.constraint.ConstraintLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <ToggleButton
+            android:id="@+id/btn_start_measure"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="@dimen/btn_width"
+            android:layout_height="75dp"
+            android:layout_margin="@dimen/default_margin"
+            android:checked="false"
+            android:clickable="false"
+            android:text="@string/btn_measure_start"
+            android:textOff="@string/btn_measure_start"
+            android:textOn="@string/btn_measure_stop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/card_view_result_2"
+            app:layout_constraintStart_toStartOf="@+id/card_view_result_2"
+            app:layout_constraintTop_toBottomOf="@+id/card_view_result_2"
+            tools:text="@string/btn_measure_start" />
+
+    </android.support.constraint.ConstraintLayout>
+
+
+</LinearLayout>

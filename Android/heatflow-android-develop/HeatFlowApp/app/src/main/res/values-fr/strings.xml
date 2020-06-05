@@ -1,0 +1,85 @@
+<!--
+  * *************************************************************************************************
+  * Copyright (c) 2017, Soprod SA, HES-SO Valais-Wallis, HEI, Infotronics
+  * All rights reserved.
+  *
+  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
+  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  * WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  * *************************************************************************************************
+  -->
+<resources>
+    <string name="app_name">HeatFlow</string>
+
+    <!-- General strings -->
+    <string name="ok">OK</string>
+    <string name="ko">KO</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="cancel">Arrêter</string>
+    <string name="action_default">Par défaut</string>
+    <string name="progress">%d%%</string>
+
+    <!-- menus -->
+    <string name="menu_scan_again">Changer d\'appareil</string>
+
+    <!-- Scanner Activity -->
+    <string name="ble_not_supported">BLE n\'est pas supporté sur cet appareil.</string>
+    <string name="error_bluetooth_not_supported">Bluetooth n\'est pas disponible.</string>
+    <string name="error_scanning">Impossible de démarrer un scan.</string>
+
+    <string name="menu_start_scan">Scan</string>
+    <string name="menu_stop_scan">Stop</string>
+
+    <string name="device_name">Nome de l\'appareil</string>
+    <string name="device_addr">Adresse Bluetooth</string>
+
+    <!-- BLE Connection State -->
+    <string name="ble_conn_ready">Prêt !</string>
+    <string name="ble_conn_connecting">En connection ...</string>
+    <string name="ble_conn_initializing">Recherche des services ...</string>
+    <string name="ble_conn_disconnected">Décconecté !</string>
+
+    <!-- Main Activity -->
+    <string name="connection_progress">Connection en cours...\n\n%1$s</string>
+    <string name="device_not_connected">L\'appareil bluetooth s\'est déconnecté !</string>
+    <string name="device_connected">L\'appareil bluetooth est connecté</string>
+    <string name="connection_state">Etat de la connexion</string>
+    <string name="watch_busy">L\'appareil bluetooth est occupée ...</string>
+    <string name="model_number">Modèle</string>
+    <string name="serial_number">N. de série</string>
+    <string name="hardware_revision">Rév. Hardware</string>
+    <string name="firmware_revision">Rév. Firmware</string>
+
+    <string name="btn_measure_start">Démarrer les mesures</string>
+    <string name="btn_measure_stop">Arrêter les mesures</string>
+    <string name="ads_1_result">Température</string>
+    <string name="ads_2_result">Echange Thermique</string>
+    <string name="coeff_a">Coefficient a</string>
+    <string name="coeff_b">Coefficient b</string>
+    <string name="diff_0_1">diff_0-1</string>
+    <string name="diff_2_3">diff_2-3</string>
+
+    <string name="battery_level">Niveau de batterie</string>
+
+    <string name="default_mv">... [mv]</string>
+    <string name="default_c">... [C]</string>
+    <string name="hf_default">...</string>
+    <string name="ads_raw">ADS raw :</string>
+    <string name="default_raw_value">...</string>
+    <string name="hf_formula">Q = </string>
+
+    <string name="error_connect_device">Impossible de se connecter à l\'appareil Bluetooth \"%1$s\" !</string>
+
+    <!-- builder activity -->
+    <string name="builder_title">Cette application doit accéder au service de localisation</string>
+    <string name="builder_message">Merci de donner accès à ce service pour que l\'application puisse découvrir des appareils BLE.</string>
+    <string name="builder_limited_title">Fonctionalité limitée</string>
+    <string name="builder_limited_message">Tant que l\'accès aux données de localisation n\'est pas autorisé, cette application ne pourra pas découvrir d\'appareil BLE en arrière plan.</string>
+
+</resources>
