@@ -67,6 +67,7 @@
 "Output/ble_app_hrs_pca10056_s140 Release/Obj/nrf_crypto_rng.o"
 "Output/ble_app_hrs_pca10056_s140 Release/Obj/nrf_crypto_shared.o"
 "Output/ble_app_hrs_pca10056_s140 Release/Obj/main.o"
+"Output/ble_app_hrs_pca10056_s140 Release/Obj/our_service.o"
 "Output/ble_app_hrs_pca10056_s140 Release/Obj/SEGGER_RTT.o"
 "Output/ble_app_hrs_pca10056_s140 Release/Obj/SEGGER_RTT_Syscalls_SES.o"
 "Output/ble_app_hrs_pca10056_s140 Release/Obj/SEGGER_RTT_printf.o"
