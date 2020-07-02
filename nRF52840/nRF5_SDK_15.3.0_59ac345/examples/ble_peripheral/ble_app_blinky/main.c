@@ -73,6 +73,7 @@
 #define CONNECTED_LED                   BSP_BOARD_LED_1                         /**< Is on when device has connected. */
 #define LEDBUTTON_LED                   BSP_BOARD_LED_2                         /**< LED to be toggled with the help of the LED Button Service. */
 #define LEDBUTTON_BUTTON                BSP_BUTTON_0                            /**< Button that will trigger the notification event with the LED Button Service */
+#define IRQ_BT_PIN                      NRF_GPIO_PIN_MAP(1,4)                  /**< Interrupt request for SPI slave */
 
 #define DEVICE_NAME                     "Nordic_Blinky"                         /**< Name of device. Will be included in the advertising data. */
 
@@ -269,6 +270,7 @@ static void nrf_qwr_error_handler(uint32_t nrf_error)
  */
 static void led_write_handler(uint16_t conn_handle, ble_lbs_t * p_lbs, uint8_t led_state)
 {
+    nrf_gpio_pin_toggle(IRQ_BT_PIN);
     if (led_state)
     {
         bsp_board_led_on(LEDBUTTON_LED);
@@ -559,6 +561,29 @@ static void idle_state_handle(void)
     }
 }
 
+/**
+ * Function for configuring UICR_REGOUT0 register
+ * to set GPIO output voltage to 3.3V.
+ */
+static void gpio_output_voltage_setup(void)
+{
+    if((NRF_UICR->REGOUT0 & (uint32_t)UICR_REGOUT0_VOUT_Msk) != (UICR_REGOUT0_VOUT_3V3 << UICR_REGOUT0_VOUT_Pos))
+    {   //check if the register has already the correct settings
+        // Set regulator settings in UICR.
+        NRF_NVMC->CONFIG = NVMC_CONFIG_WEN_Wen; /*!< Write enabled */
+        while (NRF_NVMC->READY == NVMC_READY_READY_Busy){}
+
+        NRF_UICR->REGOUT0 = (NRF_UICR->REGOUT0 & ~((uint32_t)UICR_REGOUT0_VOUT_Msk)) |
+                            (UICR_REGOUT0_VOUT_3V3 << UICR_REGOUT0_VOUT_Pos);
+
+        NRF_NVMC->CONFIG = NVMC_CONFIG_WEN_Ren; /*!< Read only access */
+        while (NRF_NVMC->READY == NVMC_READY_READY_Busy){}
+
+        // System reset is needed to update UICR registers.
+        NVIC_SystemReset();
+    }
+}
+
 
 /**@brief Function for application main entry.
  */
@@ -570,6 +595,7 @@ int main(void)
     timers_init();
     buttons_init();
     power_management_init();
+    gpio_output_voltage_setup();
     ble_stack_init();
     gap_params_init();
     gatt_init();
@@ -577,6 +603,7 @@ int main(void)
     advertising_init();
     conn_params_init();
 
+    nrf_gpio_cfg_output(IRQ_BT_PIN);  // Set IRQ PIN pin as output
     // Start execution.
     NRF_LOG_INFO("Blinky example started.");
     advertising_start();
