@@ -62,7 +62,10 @@
 #include "ble_lbs.h"
 #include "nrf_ble_gatt.h"
 #include "nrf_ble_qwr.h"
+
 #include "nrf_pwr_mgmt.h"
+
+#include "nrf_drv_spis.h"
 
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
@@ -97,6 +100,17 @@
 
 #define DEAD_BEEF                       0xDEADBEEF                              /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 
+/****SPI****/
+#define SPIS_INSTANCE 1 /**< SPIS instance index. */
+static const nrf_drv_spis_t spis = NRF_DRV_SPIS_INSTANCE(SPIS_INSTANCE);/**< SPIS instance. */
+
+//#define TEST_STRING "z"
+static uint8_t       m_tx_buf[] = {0x41,0xAA};//TEST_STRING;           /**< TX buffer. */
+static uint8_t       m_rx_buf[2+1];//sizeof(TEST_STRING) + 1];    /**< RX buffer. 1 byte more than the expected message*/
+static const uint8_t m_length = sizeof(m_tx_buf);        /**< Transfer length. */
+
+static volatile bool spis_xfer_done; /**< Flag used to indicate that SPIS instance completed the transfer. */
+/****SPI****/
 
 BLE_LBS_DEF(m_lbs);                                                             /**< LED Button Service instance. */
 NRF_BLE_GATT_DEF(m_gatt);                                                       /**< GATT module instance. */
@@ -584,6 +598,48 @@ static void gpio_output_voltage_setup(void)
     }
 }
 
+/**
+ * @brief SPIS user event handler.
+ *
+ * @param event
+ */
+void spis_event_handler(nrf_drv_spis_event_t event)
+{
+    if (event.evt_type == NRF_DRV_SPIS_XFER_DONE)
+    {
+        spis_xfer_done = true;
+        NRF_LOG_INFO(" Transfer completed. Received: %s",(uint32_t)m_rx_buf);
+        //m_rx_buffer cleared when readed
+    }
+}
+
+/**
+ * Function for configuring the spi peripheral as slave
+ */
+static void spi_init(void)
+{
+      // Enable the constant latency sub power mode to minimize the time it takes
+    // for the SPIS peripheral to become active after the CSN line is asserted
+    // (when the CPU is in sleep mode).
+    NRF_POWER->TASKS_CONSTLAT = 1;
+
+    //bsp_board_init(BSP_INIT_LEDS);
+
+    //APP_ERROR_CHECK(NRF_LOG_INIT(NULL));
+    //NRF_LOG_DEFAULT_BACKENDS_INIT();
+
+    NRF_LOG_INFO("SPIS example");
+    
+    //SPI configuration
+    nrf_drv_spis_config_t spis_config = NRF_DRV_SPIS_DEFAULT_CONFIG;
+    spis_config.csn_pin               = APP_SPIS_CS_PIN;
+    spis_config.miso_pin              = APP_SPIS_MISO_PIN;
+    spis_config.mosi_pin              = APP_SPIS_MOSI_PIN;
+    spis_config.sck_pin               = APP_SPIS_SCK_PIN;
+    //SPI init with event handler callback function
+    APP_ERROR_CHECK(nrf_drv_spis_init(&spis, &spis_config, spis_event_handler));
+}
+
 
 /**@brief Function for application main entry.
  */
@@ -596,6 +652,7 @@ int main(void)
     buttons_init();
     power_management_init();
     gpio_output_voltage_setup();
+    spi_init();
     ble_stack_init();
     gap_params_init();
     gatt_init();
@@ -609,9 +666,23 @@ int main(void)
     advertising_start();
 
     // Enter main loop.
-    for (;;)
+    while(1)
     {
-        idle_state_handle();
+        //idle_state_handle();
+
+        memset(m_rx_buf, 0, m_length);
+        spis_xfer_done = false;
+
+        //Set the SPI TX/RX buffer
+        APP_ERROR_CHECK(nrf_drv_spis_buffers_set(&spis, m_tx_buf, m_length, m_rx_buf, m_length));
+
+        //wait until transfer is done (wait that the master give the clock)
+        while (!spis_xfer_done)
+        {
+            __WFE();  //Wait For Event
+        }
+
+        NRF_LOG_FLUSH();
     }
 }
 

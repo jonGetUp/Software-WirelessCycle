@@ -61,15 +61,6 @@
  <Files>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="569" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../main.c" selected="1" top="487" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="7494" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../config/sdk_config.h" selected="0" top="7475" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="569" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../../components/ble/common/ble_conn_params.c" selected="0" top="551" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="267" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../../components/ble/common/ble_conn_state.c" selected="0" top="229" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="297" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../../components/softdevice/common/nrf_sdh_ble.c" selected="0" top="273" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="99" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../../components/libraries/util/app_error_weak.c" selected="0" top="84" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="596" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../../modules/nrfx/hal/nrf_uarte.h" selected="0" top="584" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="107" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../../components/boards/boards.c" selected="0" top="96" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="15842" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../../modules/nrfx/mdk/nrf52840_bitfields.h" selected="0" top="15836" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="170" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../../modules/nrfx/mdk/system_nrf52840.c" selected="0" top="144" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="950" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../../modules/nrfx/mdk/nrf52840.h" selected="0" top="1050" codecName="Default"/>
  </Files>
  <ARMCrossStudioWindow activeProject="ble_app_blinky_pca10056_s140" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>

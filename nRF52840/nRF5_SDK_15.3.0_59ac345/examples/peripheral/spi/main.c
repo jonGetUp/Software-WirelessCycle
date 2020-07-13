@@ -52,7 +52,7 @@
 static const nrf_drv_spi_t spi = NRF_DRV_SPI_INSTANCE(SPI_INSTANCE);  /**< SPI instance. */
 static volatile bool spi_xfer_done;  /**< Flag used to indicate that SPI instance completed the transfer. */
 
-#define TEST_STRING "Nordic"
+#define TEST_STRING "A"
 static uint8_t       m_tx_buf[] = TEST_STRING;           /**< TX buffer. */
 static uint8_t       m_rx_buf[sizeof(TEST_STRING) + 1];    /**< RX buffer. */
 static const uint8_t m_length = sizeof(m_tx_buf);        /**< Transfer length. */
@@ -79,12 +79,15 @@ int main(void)
 
     APP_ERROR_CHECK(NRF_LOG_INIT(NULL));
     NRF_LOG_DEFAULT_BACKENDS_INIT();
-
+  
+    //SPI configuration
     nrf_drv_spi_config_t spi_config = NRF_DRV_SPI_DEFAULT_CONFIG;
     spi_config.ss_pin   = SPI_SS_PIN;
+    spi_config.sck_pin  = SPI_SCK_PIN;
     spi_config.miso_pin = SPI_MISO_PIN;
     spi_config.mosi_pin = SPI_MOSI_PIN;
-    spi_config.sck_pin  = SPI_SCK_PIN;
+    spi_config.irq_priority  = SPI_IRQ_PRIORITY;
+    spi_config.frequency = NRF_DRV_SPI_FREQ_1M;   ///< 1 Mbps
     APP_ERROR_CHECK(nrf_drv_spi_init(&spi, &spi_config, spi_event_handler, NULL));
 
     NRF_LOG_INFO("SPI example started.");
@@ -105,6 +108,6 @@ int main(void)
         NRF_LOG_FLUSH();
 
         bsp_board_led_invert(BSP_BOARD_LED_0);
-        nrf_delay_ms(200);
+        //nrf_delay_ms(1);
     }
 }

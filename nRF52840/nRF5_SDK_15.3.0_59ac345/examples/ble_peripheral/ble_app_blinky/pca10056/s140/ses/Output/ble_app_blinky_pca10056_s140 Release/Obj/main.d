@@ -89,6 +89,10 @@ Output/ble_app_blinky_pca10056_s140\ Release/Obj/main.o: \
  ../../../../../../components/ble/nrf_ble_gatt/nrf_ble_gatt.h \
  ../../../../../../components/ble/nrf_ble_qwr/nrf_ble_qwr.h \
  ../../../../../../components/libraries/pwr_mgmt/nrf_pwr_mgmt.h \
+ ../../../../../../integration/nrfx/legacy/nrf_drv_spis.h \
+ ../../../../../../modules/nrfx/drivers/include/nrfx_spis.h \
+ ../../../../../../modules/nrfx/hal/nrf_spis.h \
+ ../../../../../../modules/nrfx/hal/nrf_gpio.h \
  ../../../../../../components/libraries/log/nrf_log.h \
  ../../../../../../components/libraries/experimental_section_vars/nrf_section.h \
  ../../../../../../components/libraries/strerror/nrf_strerror.h \

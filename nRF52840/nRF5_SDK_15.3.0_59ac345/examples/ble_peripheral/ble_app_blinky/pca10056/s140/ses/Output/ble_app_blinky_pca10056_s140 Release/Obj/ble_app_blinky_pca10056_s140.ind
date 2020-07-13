@@ -37,6 +37,8 @@
 "Output/ble_app_blinky_pca10056_s140 Release/Obj/nrfx_prs.o"
 "Output/ble_app_blinky_pca10056_s140 Release/Obj/nrfx_uart.o"
 "Output/ble_app_blinky_pca10056_s140 Release/Obj/nrfx_uarte.o"
+"Output/ble_app_blinky_pca10056_s140 Release/Obj/nrf_drv_spis.o"
+"Output/ble_app_blinky_pca10056_s140 Release/Obj/nrfx_spis.o"
 "Output/ble_app_blinky_pca10056_s140 Release/Obj/main.o"
 "Output/ble_app_blinky_pca10056_s140 Release/Obj/SEGGER_RTT.o"
 "Output/ble_app_blinky_pca10056_s140 Release/Obj/SEGGER_RTT_Syscalls_SES.o"
