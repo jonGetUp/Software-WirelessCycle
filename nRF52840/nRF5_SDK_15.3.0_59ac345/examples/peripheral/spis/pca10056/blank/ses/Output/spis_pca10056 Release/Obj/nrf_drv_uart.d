@@ -1,6 +1,6 @@
 Output/spis_pca10056\ Release/Obj/nrf_drv_uart.o: \
- C:\Users\jogas\Google\ Drive\Bachelor\_Software\nRF52840\nRF5_SDK_15.3.0_59ac345\integration\nrfx\legacy\nrf_drv_uart.c \
- C:\Users\jogas\Google\ Drive\Bachelor\_Software\nRF52840\nRF5_SDK_15.3.0_59ac345\integration\nrfx\legacy\nrf_drv_uart.h \
+ C:\Users\jogas\Google\ Drive\Bachelor\_Software\nRF52840\nRF5_SDK_15.3.0_59ac345\examples\peripheral\spis\pca10056\blank\ses\nrf_drv_uart.c \
+ ../../../../../../integration/nrfx/legacy/nrf_drv_uart.h \
  ../../../../../../modules/nrfx/nrfx.h \
  ../../../../../../integration/nrfx/nrfx_config.h ../config/sdk_config.h \
  ../../../../../../modules/nrfx/drivers/nrfx_common.h \

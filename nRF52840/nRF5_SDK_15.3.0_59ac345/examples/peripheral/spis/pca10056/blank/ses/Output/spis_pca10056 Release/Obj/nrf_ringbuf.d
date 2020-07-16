@@ -1,6 +1,6 @@
 Output/spis_pca10056\ Release/Obj/nrf_ringbuf.o: \
- C:\Users\jogas\Google\ Drive\Bachelor\_Software\nRF52840\nRF5_SDK_15.3.0_59ac345\components\libraries\ringbuf\nrf_ringbuf.c \
- C:\Users\jogas\Google\ Drive\Bachelor\_Software\nRF52840\nRF5_SDK_15.3.0_59ac345\components\libraries\ringbuf\nrf_ringbuf.h \
+ C:\Users\jogas\Google\ Drive\Bachelor\_Software\nRF52840\nRF5_SDK_15.3.0_59ac345\examples\peripheral\spis\pca10056\blank\ses\nrf_ringbuf.c \
+ ../../../../../../components/libraries/ringbuf/nrf_ringbuf.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 4.52c/include/stdint.h \
  ../../../../../../components/libraries/atomic/nrf_atomic.h \
  ../../../../../../components/libraries/util/sdk_common.h \

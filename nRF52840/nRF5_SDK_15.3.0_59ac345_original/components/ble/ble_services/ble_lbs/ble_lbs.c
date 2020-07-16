@@ -102,9 +102,12 @@ uint32_t ble_lbs_init(ble_lbs_t * p_lbs, const ble_lbs_init_t * p_lbs_init)
     memset(&add_char_params, 0, sizeof(add_char_params));
     add_char_params.uuid              = LBS_UUID_BUTTON_CHAR;
     add_char_params.uuid_type         = p_lbs->uuid_type;
-    add_char_params.init_len          = sizeof(uint8_t);
-    add_char_params.max_len           = sizeof(uint8_t);
+    add_char_params.init_len          = 2;//sizeof(uint8_t);
+    add_char_params.max_len           = 2;//sizeof(uint8_t);
+    uint8_t value[2]                  = {0x12,0x34};
+    add_char_params.p_init_value      = value; //init first value
     add_char_params.char_props.read   = 1;
+    add_char_params.char_props.write = 1;
     add_char_params.char_props.notify = 1;
 
     add_char_params.read_access       = SEC_OPEN;
@@ -137,13 +140,18 @@ uint32_t ble_lbs_init(ble_lbs_t * p_lbs, const ble_lbs_init_t * p_lbs_init)
 uint32_t ble_lbs_on_button_change(uint16_t conn_handle, ble_lbs_t * p_lbs, uint8_t button_state)
 {
     ble_gatts_hvx_params_t params;
-    uint16_t len = sizeof(button_state);
+//    uint16_t len = sizeof(button_state);
+    uint16_t send = 0x0808;
+    uint16_t len = 2;
+
 
     memset(&params, 0, sizeof(params));
-    params.type   = BLE_GATT_HVX_NOTIFICATION;
     params.handle = p_lbs->button_char_handles.value_handle;
-    params.p_data = &button_state;
-    params.p_len  = &len;
+    params.type   = BLE_GATT_HVX_NOTIFICATION;
+    params.offset = 0;      //characteristic value might be a sequence of many bytes.
+    params.p_len  = &len; //number of bytes to transmitt
+//    params.p_data = &button_state; //data pointer
+    params.p_data = (uint8_t*)&send; //data pointer
 
     return sd_ble_gatts_hvx(conn_handle, &params);
 }

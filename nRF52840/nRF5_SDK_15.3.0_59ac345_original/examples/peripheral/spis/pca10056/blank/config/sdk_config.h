@@ -105,7 +105,7 @@
 // <4294967295=> Not connected 
 
 #ifndef APP_SPIS_SCK_PIN
-#define APP_SPIS_SCK_PIN 26
+#define APP_SPIS_SCK_PIN 41
 #endif
 
 // <o> APP_SPIS_MISO_PIN  - Pin number
@@ -161,7 +161,7 @@
 // <4294967295=> Not connected 
 
 #ifndef APP_SPIS_MISO_PIN
-#define APP_SPIS_MISO_PIN 30
+#define APP_SPIS_MISO_PIN 26
 #endif
 
 // <o> APP_SPIS_MOSI_PIN  - Pin number
@@ -217,7 +217,7 @@
 // <4294967295=> Not connected 
 
 #ifndef APP_SPIS_MOSI_PIN
-#define APP_SPIS_MOSI_PIN 29
+#define APP_SPIS_MOSI_PIN 4
 #endif
 
 // <o> APP_SPIS_CS_PIN  - Pin number
@@ -273,7 +273,7 @@
 // <4294967295=> Not connected 
 
 #ifndef APP_SPIS_CS_PIN
-#define APP_SPIS_CS_PIN 31
+#define APP_SPIS_CS_PIN 29
 #endif
 
 // <o> APP_SPIS_IRQ_PRIORITY  - Interrupt priority
@@ -1262,7 +1262,7 @@
  
 
 #ifndef NRF_FPRINTF_FLAG_AUTOMATIC_CR_ON_LF_ENABLED
-#define NRF_FPRINTF_FLAG_AUTOMATIC_CR_ON_LF_ENABLED 1
+#define NRF_FPRINTF_FLAG_AUTOMATIC_CR_ON_LF_ENABLED 0
 #endif
 
 // </h> 
@@ -1277,7 +1277,7 @@
 // <e> NRF_LOG_BACKEND_RTT_ENABLED - nrf_log_backend_rtt - Log RTT backend
 //==========================================================
 #ifndef NRF_LOG_BACKEND_RTT_ENABLED
-#define NRF_LOG_BACKEND_RTT_ENABLED 0
+#define NRF_LOG_BACKEND_RTT_ENABLED 1
 #endif
 // <o> NRF_LOG_BACKEND_RTT_TEMP_BUFFER_SIZE - Size of buffer for partially processed strings. 
 // <i> Size of the buffer is a trade-off between RAM usage and processing.

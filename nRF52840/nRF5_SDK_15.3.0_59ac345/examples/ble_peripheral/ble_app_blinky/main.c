@@ -103,10 +103,9 @@
 /****SPI****/
 #define SPIS_INSTANCE 1 /**< SPIS instance index. */
 static const nrf_drv_spis_t spis = NRF_DRV_SPIS_INSTANCE(SPIS_INSTANCE);/**< SPIS instance. */
-
-//#define TEST_STRING "z"
-static uint8_t       m_tx_buf[] = {0x41,0xAA};//TEST_STRING;           /**< TX buffer. */
-static uint8_t       m_rx_buf[2+1];//sizeof(TEST_STRING) + 1];    /**< RX buffer. 1 byte more than the expected message*/
+//#define TEST_STRING "nordic"
+static uint8_t       m_tx_buf[] = {0xAA, 0xAA};//TEST_STRING;           /**< TX buffer.  {0x41,0xAA};*/
+static uint8_t       m_rx_buf[sizeof(m_tx_buf)];    /**< RX buffer. 1 byte more than the expected message*///2+1];//
 static const uint8_t m_length = sizeof(m_tx_buf);        /**< Transfer length. */
 
 static volatile bool spis_xfer_done; /**< Flag used to indicate that SPIS instance completed the transfer. */
@@ -116,11 +115,17 @@ BLE_LBS_DEF(m_lbs);                                                             
 NRF_BLE_GATT_DEF(m_gatt);                                                       /**< GATT module instance. */
 NRF_BLE_QWR_DEF(m_qwr);                                                         /**< Context for the Queued Write module.*/
 
+// OUR_JOB: Step 3.G, Declare an app_timer id variable and define our timer interval and define a timer interval
+APP_TIMER_DEF(m_lbs_timer_id);
+#define LBS_CHAR_TIMER_INTERVAL     APP_TIMER_TICKS(1000) // 1000 ms intervals
+
+
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;                        /**< Handle of the current connection. */
 
 static uint8_t m_adv_handle = BLE_GAP_ADV_SET_HANDLE_NOT_SET;                   /**< Advertising handle used to identify an advertising set. */
 static uint8_t m_enc_advdata[BLE_GAP_ADV_SET_DATA_SIZE_MAX];                    /**< Buffer for storing an encoded advertising set. */
 static uint8_t m_enc_scan_response_data[BLE_GAP_ADV_SET_DATA_SIZE_MAX];         /**< Buffer for storing an encoded scan data. */
+
 
 /**@brief Struct that contains pointers to the encoded advertising data. */
 static ble_gap_adv_data_t m_adv_data =
@@ -164,16 +169,27 @@ static void leds_init(void)
     bsp_board_init(BSP_INIT_LEDS);
 }
 
+static void timer_timeout_handler(void * p_context)
+{
+    // OUR_JOB: Step 3.F, Update temperature and characteristic value.
+      uint16_t batVolt = 0;
+      batVolt = ((uint16_t)m_rx_buf[1]<<8) + ((uint16_t)m_rx_buf[0]& 0x00FF);
+      ble_lbs_batVolt_characteristic_update(m_conn_handle, &m_lbs, &batVolt);  //call the characteristic update function
+}
 
 /**@brief Function for the Timer initialization.
  *
- * @details Initializes the timer module.
+ * @details Initializes the timer module. This creates and starts application timers.
  */
 static void timers_init(void)
 {
-    // Initialize timer module, making it use the scheduler
+    // Initialize timer module.
     ret_code_t err_code = app_timer_init();
     APP_ERROR_CHECK(err_code);
+
+    // OUR_JOB: Step 3.H, Initiate our timer
+    app_timer_create(&m_lbs_timer_id, APP_TIMER_MODE_REPEATED, timer_timeout_handler);
+    //call the timeout handler, repeatedly (else APP_TIMER_MODE_SINGLE_SHOT)
 }
 
 
@@ -409,6 +425,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
             APP_ERROR_CHECK(err_code);
             err_code = app_button_enable();
             APP_ERROR_CHECK(err_code);
+            app_timer_start(m_lbs_timer_id, LBS_CHAR_TIMER_INTERVAL, NULL);  //start adv timer
             break;
 
         case BLE_GAP_EVT_DISCONNECTED:
@@ -418,6 +435,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
             err_code = app_button_disable();
             APP_ERROR_CHECK(err_code);
             advertising_start();
+            app_timer_stop(m_lbs_timer_id);  //stop adv timer
             break;
 
         case BLE_GAP_EVT_SEC_PARAMS_REQUEST:
@@ -608,7 +626,8 @@ void spis_event_handler(nrf_drv_spis_event_t event)
     if (event.evt_type == NRF_DRV_SPIS_XFER_DONE)
     {
         spis_xfer_done = true;
-        NRF_LOG_INFO(" Transfer completed. Received: %s",(uint32_t)m_rx_buf);
+        //NRF_LOG_INFO(" Transfer completed. Received: %x",(uint32_t)(m_rx_buf[0]<<16 & m_rx_buf[1]<<8 & m_rx_buf[2]));
+        NRF_LOG_INFO(" Transfer completed. Received: %x %x",m_rx_buf[1],m_rx_buf[0]);
         //m_rx_buffer cleared when readed
     }
 }
@@ -640,6 +659,25 @@ static void spi_init(void)
     APP_ERROR_CHECK(nrf_drv_spis_init(&spis, &spis_config, spis_event_handler));
 }
 
+/**
+ * Function call in the while(1), handle the SPI communications
+ */
+void spis_handle(void)
+{
+    memset(m_rx_buf, 0, m_length);
+    spis_xfer_done = false;
+
+    //Set the SPI TX/RX buffer
+    APP_ERROR_CHECK(nrf_drv_spis_buffers_set(&spis, m_tx_buf, m_length, m_rx_buf, m_length));
+
+    //wait until transfer is done (wait that the master give the clock)
+    while (!spis_xfer_done)
+    {
+        __WFE();  //Wait For Event
+    }
+
+    NRF_LOG_FLUSH();
+}
 
 /**@brief Function for application main entry.
  */
@@ -668,21 +706,8 @@ int main(void)
     // Enter main loop.
     while(1)
     {
-        //idle_state_handle();
-
-        memset(m_rx_buf, 0, m_length);
-        spis_xfer_done = false;
-
-        //Set the SPI TX/RX buffer
-        APP_ERROR_CHECK(nrf_drv_spis_buffers_set(&spis, m_tx_buf, m_length, m_rx_buf, m_length));
-
-        //wait until transfer is done (wait that the master give the clock)
-        while (!spis_xfer_done)
-        {
-            __WFE();  //Wait For Event
-        }
-
-        NRF_LOG_FLUSH();
+        idle_state_handle();
+        spis_handle();
     }
 }
 

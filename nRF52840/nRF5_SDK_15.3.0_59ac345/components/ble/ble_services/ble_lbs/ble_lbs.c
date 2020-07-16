@@ -43,7 +43,7 @@
 #include "ble_srv_common.h"
 
 
-/**@brief Function for handling the Write event.
+/**@brief Function for handling the Write event (write command)
  *
  * @param[in] p_lbs      LED Button Service structure.
  * @param[in] p_ble_evt  Event received from the BLE stack.
@@ -59,7 +59,6 @@ static void on_write(ble_lbs_t * p_lbs, ble_evt_t const * p_ble_evt)
         p_lbs->led_write_handler(p_ble_evt->evt.gap_evt.conn_handle, p_lbs, p_evt_write->data[0]);
     }
 }
-
 
 void ble_lbs_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context)
 {
@@ -102,13 +101,17 @@ uint32_t ble_lbs_init(ble_lbs_t * p_lbs, const ble_lbs_init_t * p_lbs_init)
     memset(&add_char_params, 0, sizeof(add_char_params));
     add_char_params.uuid              = LBS_UUID_BUTTON_CHAR;
     add_char_params.uuid_type         = p_lbs->uuid_type;
-    add_char_params.init_len          = sizeof(uint8_t);
-    add_char_params.max_len           = sizeof(uint8_t);
+    add_char_params.init_len          = 2;//sizeof(uint8_t);
+    add_char_params.max_len           = 2;//sizeof(uint8_t);
+    uint8_t value[2]                  = {0xD2,0x04};
+    add_char_params.p_init_value      = value; //init first value
     add_char_params.char_props.read   = 1;
     add_char_params.char_props.notify = 1;
 
-    add_char_params.read_access       = SEC_OPEN;
-    add_char_params.cccd_write_access = SEC_OPEN;
+    add_char_params.read_access       = SEC_OPEN; //Access open.
+    add_char_params.cccd_write_access = SEC_OPEN; 
+
+    //enable notify?
 
     err_code = characteristic_add(p_lbs->service_handle,
                                   &add_char_params,
@@ -127,7 +130,7 @@ uint32_t ble_lbs_init(ble_lbs_t * p_lbs, const ble_lbs_init_t * p_lbs_init)
     add_char_params.char_props.read  = 1;
     add_char_params.char_props.write = 1;
 
-    add_char_params.read_access  = SEC_OPEN;
+    add_char_params.read_access  = SEC_OPEN;  //Access open.
     add_char_params.write_access = SEC_OPEN;
 
     return characteristic_add(p_lbs->service_handle, &add_char_params, &p_lbs->led_char_handles);
@@ -147,4 +150,33 @@ uint32_t ble_lbs_on_button_change(uint16_t conn_handle, ble_lbs_t * p_lbs, uint8
 
     return sd_ble_gatts_hvx(conn_handle, &params);
 }
+
+static int32_t battery_value_local;
+// ALREADY_DONE_FOR_YOU: Function to be called when updating characteristic value
+uint32_t ble_lbs_batVolt_characteristic_update(uint16_t conn_handle, ble_lbs_t *p_lbs, uint16_t *battery_value)
+{
+//  // implement the notification on connection
+//  // OUR_JOB: Step 3.E, Update characteristic value
+//  if (conn_handle != BLE_CONN_HANDLE_INVALID)//housekeeping allow to check if we are in a valid connection
+//  {
+//    if(battery_value_local != *battery_value)  //battery changed
+//    {
+        uint16_t               len = 2;//sizeof(battery_value);
+        ble_gatts_hvx_params_t hvx_params;          //Handle Value X(notification or indication)
+        memset(&hvx_params, 0, sizeof(hvx_params));
+
+        hvx_params.handle = p_lbs->button_char_handles.value_handle; //which characteristic value we are working on
+        hvx_params.type   = BLE_GATT_HVX_NOTIFICATION;                //notification
+        hvx_params.offset = 0;      //characteristic value might be a sequence of many bytes.
+        hvx_params.p_len  = &len;   //number of bytes to transmitt
+        hvx_params.p_data = (uint8_t*)battery_value;  //data pointer
+
+        return sd_ble_gatts_hvx(conn_handle, &hvx_params);
+//      }
+//       battery_value_local = *battery_value;
+//    }
+
+//  return NRF_SUCCESS; //nothing has be send
+}
+
 #endif // NRF_MODULE_ENABLED(BLE_LBS)
