@@ -155,12 +155,12 @@ static int32_t battery_value_local;
 // ALREADY_DONE_FOR_YOU: Function to be called when updating characteristic value
 uint32_t ble_lbs_batVolt_characteristic_update(uint16_t conn_handle, ble_lbs_t *p_lbs, uint16_t *battery_value)
 {
-//  // implement the notification on connection
-//  // OUR_JOB: Step 3.E, Update characteristic value
-//  if (conn_handle != BLE_CONN_HANDLE_INVALID)//housekeeping allow to check if we are in a valid connection
-//  {
-//    if(battery_value_local != *battery_value)  //battery changed
-//    {
+  // implement the notification on connection
+  // OUR_JOB: Step 3.E, Update characteristic value
+  if (conn_handle != BLE_CONN_HANDLE_INVALID)//housekeeping allow to check if we are in a valid connection
+  {
+    if(battery_value_local != *battery_value)  //battery changed
+    {
         uint16_t               len = 2;//sizeof(battery_value);
         ble_gatts_hvx_params_t hvx_params;          //Handle Value X(notification or indication)
         memset(&hvx_params, 0, sizeof(hvx_params));
@@ -172,11 +172,10 @@ uint32_t ble_lbs_batVolt_characteristic_update(uint16_t conn_handle, ble_lbs_t *
         hvx_params.p_data = (uint8_t*)battery_value;  //data pointer
 
         return sd_ble_gatts_hvx(conn_handle, &hvx_params);
-//      }
-//       battery_value_local = *battery_value;
-//    }
-
-//  return NRF_SUCCESS; //nothing has be send
+      }
+       battery_value_local = *battery_value;
+    }
+  return NRF_SUCCESS; //nothing has be send
 }
 
 #endif // NRF_MODULE_ENABLED(BLE_LBS)

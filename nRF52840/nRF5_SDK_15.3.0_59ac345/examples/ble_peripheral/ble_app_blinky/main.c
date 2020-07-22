@@ -64,6 +64,7 @@
 #include "nrf_ble_qwr.h"
 
 #include "nrf_pwr_mgmt.h"
+#include "nrf_delay.h"
 
 #include "nrf_drv_spis.h"
 
@@ -102,11 +103,19 @@
 
 /****SPI****/
 #define SPIS_INSTANCE 1 /**< SPIS instance index. */
+#define ILLEGAL_FUNCTION 0x01
+#define SPI_BUFFER_SIZE 10
 static const nrf_drv_spis_t spis = NRF_DRV_SPIS_INSTANCE(SPIS_INSTANCE);/**< SPIS instance. */
 //#define TEST_STRING "nordic"
-static uint8_t       m_tx_buf[] = {0xAA, 0xAA};//TEST_STRING;           /**< TX buffer.  {0x41,0xAA};*/
+
+static uint8_t       m_tx_buf[SPI_BUFFER_SIZE] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};//TEST_STRING;           /**< TX buffer.  {0x41,0xAA};*/
 static uint8_t       m_rx_buf[sizeof(m_tx_buf)];    /**< RX buffer. 1 byte more than the expected message*///2+1];//
 static const uint8_t m_length = sizeof(m_tx_buf);        /**< Transfer length. */
+int8_t frameIndex = 0;  //can be assigned the value -1
+uint8_t frameError = 0;
+uint8_t frameFonctionCode = 0;
+uint8_t fonctionCode = 0;
+uint16_t batVolt = 0;
 
 static volatile bool spis_xfer_done; /**< Flag used to indicate that SPIS instance completed the transfer. */
 /****SPI****/
@@ -172,9 +181,7 @@ static void leds_init(void)
 static void timer_timeout_handler(void * p_context)
 {
     // OUR_JOB: Step 3.F, Update temperature and characteristic value.
-      uint16_t batVolt = 0;
-      batVolt = ((uint16_t)m_rx_buf[1]<<8) + ((uint16_t)m_rx_buf[0]& 0x00FF);
-      ble_lbs_batVolt_characteristic_update(m_conn_handle, &m_lbs, &batVolt);  //call the characteristic update function
+    ble_lbs_batVolt_characteristic_update(m_conn_handle, &m_lbs, &batVolt);  //call the characteristic update function
 }
 
 /**@brief Function for the Timer initialization.
@@ -616,6 +623,66 @@ static void gpio_output_voltage_setup(void)
     }
 }
 
+void spis_reset_tx_buffer(void)
+{
+    for(int i=0; i < SPI_BUFFER_SIZE; i++)
+    {
+        m_tx_buf[i] = 0;
+    }
+}
+
+void spis_send_function_code(void)
+{
+    //spis_reset_tx_buffer();
+    m_tx_buf[0] = 0x7F; //Acknowledge, send function code and data
+    m_tx_buf[1] = 0x01; //data size
+    m_tx_buf[2] = 0x03; //desired function code
+
+    //txBuffer loaded and ready to be readed -> pulse Interrupt request to the master
+    nrf_gpio_pin_set(IRQ_BT_PIN);
+    nrf_delay_us(10);
+    nrf_gpio_pin_clear(IRQ_BT_PIN);
+        
+//    switch(frameIndex)
+//    {
+//      case 0:
+//        m_tx_buf[0] = 0x7F; //Acknowledge, send function code and data
+//        break;
+//      case 1:
+//        m_tx_buf[0] = 0x0B; //Acknowledge, send function code and data
+//        break;
+//      case 2:
+//        frameIndex = -1;    //Read the last byte
+//        break;
+//    }
+}
+
+void spis_read_batVolt_master(void)
+{
+        batVolt = (((uint16_t)m_rx_buf[2])<<8)& 0xFF00; //read 8 LSB
+        batVolt = batVolt + (((uint16_t)m_rx_buf[3]) & 0x00FF);                 //read 8 MSB
+
+//    switch(frameIndex)
+//    {
+//      case 0:
+//        m_tx_buf[0] = 0x0B; //Acknowledge, send function code and data
+//        break;
+//      case 1:
+//        batVolt = ((uint16_t)m_rx_buf[0]) & 0x00FF;  //read 8 MSB
+//        break;
+//      case 2:
+//        batVolt = batVolt + ((((uint16_t)m_rx_buf[0])<<8)& 0xFF00);     //read 8 LSB
+//        frameIndex = -1;
+//        break;
+//      case 3:
+//        frameIndex = -1;  
+//        break;
+//      default:
+//        frameIndex = -1;
+//        break;
+//    }
+}
+
 /**
  * @brief SPIS user event handler.
  *
@@ -625,10 +692,49 @@ void spis_event_handler(nrf_drv_spis_event_t event)
 {
     if (event.evt_type == NRF_DRV_SPIS_XFER_DONE)
     {
+        spis_reset_tx_buffer();
         spis_xfer_done = true;
         //NRF_LOG_INFO(" Transfer completed. Received: %x",(uint32_t)(m_rx_buf[0]<<16 & m_rx_buf[1]<<8 & m_rx_buf[2]));
-        NRF_LOG_INFO(" Transfer completed. Received: %x %x",m_rx_buf[1],m_rx_buf[0]);
+        NRF_LOG_INFO(" Transfer completed. Received: %x",m_rx_buf[0]);
         //m_rx_buffer cleared when readed
+
+        //first sended byte is the fonctionCode
+//        if(frameIndex == 0)
+//        {
+          frameFonctionCode = m_rx_buf[0];
+//        }
+        switch(frameFonctionCode)
+        {
+          case 0x7F:
+            spis_send_function_code();
+            break;
+          case 0x03:
+            spis_read_batVolt_master();
+            break;
+          case 0x00:  //do nothing, master read the slave
+            break;
+          default:
+            //communication error
+            NRF_LOG_INFO("ILLEGAL FUNCTION");
+            //1: send function code with MSB at 1
+            spis_reset_tx_buffer();
+            m_tx_buf[0] = frameFonctionCode + 0x80; 
+//            frameError = 1;
+//            //2: send exception code illegal function 
+//            if(frameIndex == 1)
+//            {
+              m_tx_buf[1] = ILLEGAL_FUNCTION;
+//            }
+//            //3. let the PIC read the ILLEGAL FUNCTION excpetion code and reset the index
+//            if(frameIndex > 1)
+//            {
+//              frameIndex = -1;
+//              frameError = 0;
+//              //return; //exit the function whitout incrementing the frameIndex
+//            }
+            break;
+        }
+        frameIndex++;
     }
 }
 
