@@ -117,7 +117,7 @@ uint8_t frameFonctionCode = 0;
 uint8_t fonctionCode = 0;
 uint16_t batVolt = 0;
 
-uint8_t serialNumber = 0;
+uint32_t serialNumber = 0;
 
 static volatile bool spis_xfer_done; /**< Flag used to indicate that SPIS instance completed the transfer. */
 /****SPI****/
@@ -177,7 +177,10 @@ void spis_write_master_serial_number(void)
 {
     m_tx_buf[0] = 0x0B; //Acknowledge, send function code and data
     m_tx_buf[1] = 0x01; //data size
-    m_tx_buf[2] = serialNumber; //desired function code
+    m_tx_buf[2] = (uint8_t) serialNumber; //desired function code
+    m_tx_buf[3] = (uint8_t) (serialNumber>>8); //desired function code
+    m_tx_buf[4] = (uint8_t) (serialNumber>>16); //desired function code
+    m_tx_buf[5] = (uint8_t) (serialNumber>>24); //desired function code
 
     nrf_gpio_pin_set(IRQ_BT_PIN);
     nrf_delay_us(10); //delay min allow the PIC to detect the pulse
@@ -363,13 +366,13 @@ static void led_write_handler(uint16_t conn_handle, ble_lbs_t * p_lbs, uint8_t l
     {
         //bsp_board_led_on(LEDBUTTON_LED);
         NRF_LOG_INFO("Received LED ON!");
-        serialNumber = 0xAA;
+        serialNumber = 0xAABBCCDD;
     }
     else
     {
         //bsp_board_led_off(LEDBUTTON_LED);
         NRF_LOG_INFO("Received LED OFF!");
-        serialNumber = 0x00;
+        serialNumber = 0x00000000;
     }
     spis_write_master_serial_number();
 }
