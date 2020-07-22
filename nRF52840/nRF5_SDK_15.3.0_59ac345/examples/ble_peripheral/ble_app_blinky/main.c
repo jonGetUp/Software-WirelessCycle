@@ -181,6 +181,7 @@ static void leds_init(void)
 static void timer_timeout_handler(void * p_context)
 {
     // OUR_JOB: Step 3.F, Update temperature and characteristic value.
+    spis_send_function_code(0x03);  //
     ble_lbs_batVolt_characteristic_update(m_conn_handle, &m_lbs, &batVolt);  //call the characteristic update function
 }
 
@@ -631,18 +632,24 @@ void spis_reset_tx_buffer(void)
     }
 }
 
-void spis_send_function_code(void)
+void spis_send_function_code(uint8_t functionCode)
 {
-    //spis_reset_tx_buffer();
     m_tx_buf[0] = 0x7F; //Acknowledge, send function code and data
     m_tx_buf[1] = 0x01; //data size
-    m_tx_buf[2] = 0x03; //desired function code
 
+    switch(functionCode)
+    {
+      case 0x03:
+        m_tx_buf[2] = 0x03; //desired function code
+        break;
+      default:
+        break;
+    }
     //txBuffer loaded and ready to be readed -> pulse Interrupt request to the master
     nrf_gpio_pin_set(IRQ_BT_PIN);
-    nrf_delay_us(10);
+    nrf_delay_us(10); //delay min allow the PIC to detect the pulse
     nrf_gpio_pin_clear(IRQ_BT_PIN);
-        
+            
 //    switch(frameIndex)
 //    {
 //      case 0:
@@ -706,7 +713,7 @@ void spis_event_handler(nrf_drv_spis_event_t event)
         switch(frameFonctionCode)
         {
           case 0x7F:
-            spis_send_function_code();
+            //spis_send_function_code();
             break;
           case 0x03:
             spis_read_batVolt_master();
