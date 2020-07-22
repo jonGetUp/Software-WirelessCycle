@@ -117,6 +117,8 @@ uint8_t frameFonctionCode = 0;
 uint8_t fonctionCode = 0;
 uint16_t batVolt = 0;
 
+uint8_t serialNumber = 0;
+
 static volatile bool spis_xfer_done; /**< Flag used to indicate that SPIS instance completed the transfer. */
 /****SPI****/
 
@@ -135,6 +137,52 @@ static uint8_t m_adv_handle = BLE_GAP_ADV_SET_HANDLE_NOT_SET;                   
 static uint8_t m_enc_advdata[BLE_GAP_ADV_SET_DATA_SIZE_MAX];                    /**< Buffer for storing an encoded advertising set. */
 static uint8_t m_enc_scan_response_data[BLE_GAP_ADV_SET_DATA_SIZE_MAX];         /**< Buffer for storing an encoded scan data. */
 
+
+//tell the SPI master wich variable to return
+void spis_send_function_code(uint8_t functionCode)
+{
+    m_tx_buf[0] = 0x7F; //Acknowledge, send function code and data
+    m_tx_buf[1] = 0x01; //data size
+    m_tx_buf[2] = functionCode; //desired function code
+
+//    switch(functionCode)
+//    {
+//      case 0x03:
+//        m_tx_buf[2] = 0x03; //desired function code
+//        break;
+//      default:
+//        break;
+//    }
+    //txBuffer loaded and ready to be readed -> pulse Interrupt request to the master
+    nrf_gpio_pin_set(IRQ_BT_PIN);
+    nrf_delay_us(10); //delay min allow the PIC to detect the pulse
+    nrf_gpio_pin_clear(IRQ_BT_PIN);
+            
+//    switch(frameIndex)
+//    {
+//      case 0:
+//        m_tx_buf[0] = 0x7F; //Acknowledge, send function code and data
+//        break;
+//      case 1:
+//        m_tx_buf[0] = 0x0B; //Acknowledge, send function code and data
+//        break;
+//      case 2:
+//        frameIndex = -1;    //Read the last byte
+//        break;
+//    }
+}
+
+//write the master serial number
+void spis_write_master_serial_number(void)
+{
+    m_tx_buf[0] = 0x0B; //Acknowledge, send function code and data
+    m_tx_buf[1] = 0x01; //data size
+    m_tx_buf[2] = serialNumber; //desired function code
+
+    nrf_gpio_pin_set(IRQ_BT_PIN);
+    nrf_delay_us(10); //delay min allow the PIC to detect the pulse
+    nrf_gpio_pin_clear(IRQ_BT_PIN);
+}
 
 /**@brief Struct that contains pointers to the encoded advertising data. */
 static ble_gap_adv_data_t m_adv_data =
@@ -308,17 +356,22 @@ static void nrf_qwr_error_handler(uint32_t nrf_error)
  */
 static void led_write_handler(uint16_t conn_handle, ble_lbs_t * p_lbs, uint8_t led_state)
 {
-    nrf_gpio_pin_toggle(IRQ_BT_PIN);
+    //the led characteristic have been write, we must write this value to the pic
+    
+    //nrf_gpio_pin_toggle(IRQ_BT_PIN);
     if (led_state)
     {
-        bsp_board_led_on(LEDBUTTON_LED);
+        //bsp_board_led_on(LEDBUTTON_LED);
         NRF_LOG_INFO("Received LED ON!");
+        serialNumber = 0xAA;
     }
     else
     {
-        bsp_board_led_off(LEDBUTTON_LED);
+        //bsp_board_led_off(LEDBUTTON_LED);
         NRF_LOG_INFO("Received LED OFF!");
+        serialNumber = 0x00;
     }
+    spis_write_master_serial_number();
 }
 
 
@@ -630,38 +683,6 @@ void spis_reset_tx_buffer(void)
     {
         m_tx_buf[i] = 0;
     }
-}
-
-void spis_send_function_code(uint8_t functionCode)
-{
-    m_tx_buf[0] = 0x7F; //Acknowledge, send function code and data
-    m_tx_buf[1] = 0x01; //data size
-
-    switch(functionCode)
-    {
-      case 0x03:
-        m_tx_buf[2] = 0x03; //desired function code
-        break;
-      default:
-        break;
-    }
-    //txBuffer loaded and ready to be readed -> pulse Interrupt request to the master
-    nrf_gpio_pin_set(IRQ_BT_PIN);
-    nrf_delay_us(10); //delay min allow the PIC to detect the pulse
-    nrf_gpio_pin_clear(IRQ_BT_PIN);
-            
-//    switch(frameIndex)
-//    {
-//      case 0:
-//        m_tx_buf[0] = 0x7F; //Acknowledge, send function code and data
-//        break;
-//      case 1:
-//        m_tx_buf[0] = 0x0B; //Acknowledge, send function code and data
-//        break;
-//      case 2:
-//        frameIndex = -1;    //Read the last byte
-//        break;
-//    }
 }
 
 void spis_read_batVolt_master(void)
