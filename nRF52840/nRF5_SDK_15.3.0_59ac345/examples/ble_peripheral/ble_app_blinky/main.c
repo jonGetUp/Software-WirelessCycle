@@ -173,14 +173,14 @@ void spis_send_function_code(uint8_t functionCode)
 }
 
 //write the master serial number
-void spis_write_master_serial_number(void)
+void spis_write_master_serial_number(uint32_t snumb)
 {
     m_tx_buf[0] = 0x0B; //Acknowledge, send function code and data
     m_tx_buf[1] = 0x01; //data size
-    m_tx_buf[2] = (uint8_t) serialNumber; //desired function code
-    m_tx_buf[3] = (uint8_t) (serialNumber>>8); //desired function code
-    m_tx_buf[4] = (uint8_t) (serialNumber>>16); //desired function code
-    m_tx_buf[5] = (uint8_t) (serialNumber>>24); //desired function code
+    m_tx_buf[2] = (uint8_t) snumb; //desired function code
+    m_tx_buf[3] = (uint8_t) (snumb>>8); //desired function code
+    m_tx_buf[4] = (uint8_t) (snumb>>16); //desired function code
+    m_tx_buf[5] = (uint8_t) (snumb>>24); //desired function code
 
     nrf_gpio_pin_set(IRQ_BT_PIN);
     nrf_delay_us(10); //delay min allow the PIC to detect the pulse
@@ -357,24 +357,24 @@ static void nrf_qwr_error_handler(uint32_t nrf_error)
  * @param[in] p_lbs     Instance of LED Button Service to which the write applies.
  * @param[in] led_state Written/desired state of the LED.
  */
-static void led_write_handler(uint16_t conn_handle, ble_lbs_t * p_lbs, uint8_t led_state)
+static void led_write_handler(uint16_t conn_handle, ble_lbs_t * p_lbs, uint32_t led_state) //to change
 {
     //the led characteristic have been write, we must write this value to the pic
     
     //nrf_gpio_pin_toggle(IRQ_BT_PIN);
-    if (led_state)
-    {
-        //bsp_board_led_on(LEDBUTTON_LED);
-        NRF_LOG_INFO("Received LED ON!");
-        serialNumber = 0xAABBCCDD;
-    }
-    else
-    {
-        //bsp_board_led_off(LEDBUTTON_LED);
-        NRF_LOG_INFO("Received LED OFF!");
-        serialNumber = 0x00000000;
-    }
-    spis_write_master_serial_number();
+//    if (led_state)
+//    {
+//        //bsp_board_led_on(LEDBUTTON_LED);
+//        NRF_LOG_INFO("Received LED ON!");
+//        serialNumber = 0xAABBCCDD;
+//    }
+//    else
+//    {
+//        //bsp_board_led_off(LEDBUTTON_LED);
+//        NRF_LOG_INFO("Received LED OFF!");
+//        serialNumber = 0x00000000;
+//    }
+    spis_write_master_serial_number(led_state);
 }
 
 
